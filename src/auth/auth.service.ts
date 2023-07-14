@@ -3,15 +3,20 @@ import { User } from 'src/Mongo/Interfaces/user.interface';
 import { LoginDto } from './dtos/login.dto';
 import { UserService } from 'src/Services/users/user.service';
 import * as bcrypt from 'bcrypt';
+import { ReturnLogin } from './dtos/returnLogin.dto';
+import { CreateUserDto } from 'src/DTO/createUser.dto';
+import { LoginPayload } from './dtos/loginPayload.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        private readonly userService: UserService
-    ){}
+        private readonly userService: UserService,
+        private jwtService: JwtService
+    ) {}
 
-    async login(loginDto: LoginDto): Promise<User>{
+    async login(loginDto: LoginDto): Promise<ReturnLogin>{
         const user: User | undefined = await this.userService.findUserByEmail(loginDto.email).catch(()=> undefined)
         
         const isMatch = await bcrypt.compare(loginDto.password, user[0]?.password || '');
@@ -20,6 +25,9 @@ export class AuthService {
             throw new NotFoundException('Email or password invalid')
         }
 
-        return user
+        
+        return {
+            acessToken: await this.jwtService.signAsync({...new LoginPayload(user)})
+        }
     }
 }

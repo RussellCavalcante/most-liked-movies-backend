@@ -5,6 +5,7 @@ export const UserSchema = new Schema({
     email: String,
     phone: Number,
     cpf: String,
-    password: String
+    password: String,
+    typeUser: Number
 
 })

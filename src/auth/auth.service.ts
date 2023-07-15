@@ -25,9 +25,8 @@ export class AuthService {
             throw new NotFoundException('Email or password invalid')
         }
 
-        
         return {
-            acessToken: await this.jwtService.signAsync({...new LoginPayload(user)})
+            acessToken: await this.jwtService.signAsync({...new LoginPayload(user[0])})
         }
     }
 }

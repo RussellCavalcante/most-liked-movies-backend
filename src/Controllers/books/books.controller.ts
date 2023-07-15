@@ -2,14 +2,19 @@ import { Controller, Get, Post, Body, Delete, Param, Patch } from '@nestjs/commo
 import { BookDTO } from 'src/DTO/book.dto';
 import { Book } from 'src/Mongo/Interfaces/book.interface';
 import { BooksService } from 'src/Services/books/books.service';
+import { Roles } from 'src/decorators/roles.decorator';
+import { UserType } from 'src/enum/user-type.enum';
 
+
+@Roles(UserType.User)
 @Controller('books')
 export class BooksController {
 
     constructor(
         private readonly booksService : BooksService
     ) {}
-
+    
+    
     @Get()
     getAllBooks(): Promise<Book[]> {
         return this.booksService.getAllBooks();

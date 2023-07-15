@@ -33,6 +33,7 @@ $ npm install
 ```
 
 ## Running the app
+antes de subir o projeto verificar a string de conexao com o banco mongo, utilizei mongo atlas !
 
 ```bash
 # development
